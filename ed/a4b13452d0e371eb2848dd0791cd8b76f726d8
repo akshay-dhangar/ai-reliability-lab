@@ -1,0 +1,38 @@
+README.md
+  s_90026bd1685103::t_c671d1770cd6e8 1,3,5,7,9-37,46,48
+ROADMAP.md
+  s_90026bd1685103::t_c671d1770cd6e8 5,7
+results.go
+  s_90026bd1685103::t_438578ab0a2199 1-143
+PROGRESS.md
+  s_90026bd1685103::t_c671d1770cd6e8 1-9
+cmd/reliability/main.go
+  s_90026bd1685103::t_438578ab0a2199 1-44
+core.go
+  s_90026bd1685103::t_438578ab0a2199 5,33-34
+  s_90026bd1685103::t_2576bdfb0132e7 35
+examples/scripted-results.jsonl
+  s_90026bd1685103::t_438578ab0a2199 1-4
+cmd/reliability/main_test.go
+  s_90026bd1685103::t_438578ab0a2199 1-28
+examples/expected-report.json
+  s_90026bd1685103::t_c671d1770cd6e8 1-29
+results_test.go
+  s_90026bd1685103::t_438578ab0a2199 1-50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "eda4b13452d0e371eb2848dd0791cd8b76f726d8",
+  "prompts": {},
+  "sessions": {
+    "s_90026bd1685103": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01a187ba-22aa-7793-8324-39d8f75719e0",
+        "model": "unknown"
+      },
+      "human_author": "Akshay Dhangar <48667712+akshay-dhangar@users.noreply.github.com>"
+    }
+  }
+}

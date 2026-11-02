@@ -1,0 +1,4 @@
+{"run_id":"scripted-baseline","dataset":"arithmetic-v1","case_id":"addition","model":"scripted-a","success":true,"latency_ms":100,"input_tokens":20,"output_tokens":5}
+{"run_id":"scripted-baseline","dataset":"arithmetic-v1","case_id":"division-zero","model":"scripted-a","success":false,"latency_ms":300,"input_tokens":30,"output_tokens":10}
+{"run_id":"scripted-baseline","dataset":"arithmetic-v1","case_id":"addition","model":"scripted-b","success":true,"latency_ms":200,"input_tokens":20,"output_tokens":8}
+{"run_id":"scripted-baseline","dataset":"arithmetic-v1","case_id":"division-zero","model":"scripted-b","success":true,"latency_ms":400,"input_tokens":30,"output_tokens":12}

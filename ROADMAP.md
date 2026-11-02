@@ -2,9 +2,9 @@
 
 Goal: Evaluate model task success, latency and token usage with reproducible datasets.
 
-Status: queued. The initial core component is implemented; the full MVP is not.
+Status: active, started 2 November 2026. JSONL ingestion and metrics are implemented; the full MVP is not. Target window: 2–8 November 2026.
 
-- [ ] Day 1: Load JSONL evaluation results and aggregate metrics.
+- [x] Day 1: Load JSONL evaluation results and aggregate metrics.
 - [ ] Day 2: Define reproducible task cases and expected outcomes.
 - [ ] Day 3: Add provider-independent evaluation runner.
 - [ ] Day 4: Compare two runs and flag regressions.

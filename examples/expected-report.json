@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "run_id": "scripted-baseline",
+  "dataset": "arithmetic-v1",
+  "models": [
+    {
+      "model": "scripted-a",
+      "count": 2,
+      "passed": 1,
+      "failed": 1,
+      "success_rate": 0.5,
+      "mean_latency_ms": 200,
+      "p95_latency_ms": 300,
+      "input_tokens": 50,
+      "output_tokens": 15
+    },
+    {
+      "model": "scripted-b",
+      "count": 2,
+      "passed": 2,
+      "failed": 0,
+      "success_rate": 1,
+      "mean_latency_ms": 300,
+      "p95_latency_ms": 400,
+      "input_tokens": 50,
+      "output_tokens": 20
+    }
+  ]
+}

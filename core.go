@@ -2,6 +2,7 @@ package core
 
 import (
 	"errors"
+	"math"
 	"time"
 )
 
@@ -28,6 +29,9 @@ func Summarize(samples []Sample) (Summary, error) {
 		}
 		if s.Success {
 			r.Passed++
+		}
+		if s.Latency > time.Duration(math.MaxInt64)-total || s.InputTokens > math.MaxInt-r.InputTokens || s.OutputTokens > math.MaxInt-r.OutputTokens {
+			return Summary{}, errors.New("measurement totals overflow")
 		}
 		total += s.Latency
 		r.InputTokens += s.InputTokens

@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "id": "backend-basics-v1",
+  "tasks": [
+    {"id":"http-created","prompt":"Return only the HTTP status code for Created.","expected":"201","match":"exact"},
+    {"id":"go-zero","prompt":"Return only the zero value of a Go int.","expected":"0","match":"trim_space"},
+    {"id":"queue-order","prompt":"Return only the acronym for first in, first out.","expected":"FIFO","match":"exact"}
+  ]
+}

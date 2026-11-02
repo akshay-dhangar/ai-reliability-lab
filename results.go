@@ -3,6 +3,7 @@ package core
 import (
 	"bufio"
 	"bytes"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -17,27 +18,34 @@ const MaxRecords = 10000
 
 // Record contains observed measurements, not model outputs or evaluator logic.
 type Record struct {
-	RunID        string `json:"run_id"`
-	Dataset      string `json:"dataset"`
-	CaseID       string `json:"case_id"`
-	Model        string `json:"model"`
-	Success      *bool  `json:"success"`
-	LatencyMS    *int64 `json:"latency_ms"`
-	InputTokens  *int   `json:"input_tokens"`
-	OutputTokens *int   `json:"output_tokens"`
+	ErrorKind     string `json:"error_kind,omitempty"`
+	UsageKnown    *bool  `json:"usage_known,omitempty"`
+	DatasetSHA256 string `json:"dataset_sha256,omitempty"`
+	ProviderMode  string `json:"provider_mode,omitempty"`
+	RunID         string `json:"run_id"`
+	Dataset       string `json:"dataset"`
+	CaseID        string `json:"case_id"`
+	Model         string `json:"model"`
+	Success       *bool  `json:"success"`
+	LatencyMS     *int64 `json:"latency_ms"`
+	InputTokens   *int   `json:"input_tokens"`
+	OutputTokens  *int   `json:"output_tokens"`
 }
 type ModelReport struct {
-	Model         string  `json:"model"`
-	Count         int     `json:"count"`
-	Passed        int     `json:"passed"`
-	Failed        int     `json:"failed"`
-	SuccessRate   float64 `json:"success_rate"`
-	MeanLatencyMS float64 `json:"mean_latency_ms"`
-	P95LatencyMS  int64   `json:"p95_latency_ms"`
-	InputTokens   int     `json:"input_tokens"`
-	OutputTokens  int     `json:"output_tokens"`
+	UnknownUsageCount int     `json:"unknown_usage_count,omitempty"`
+	Model             string  `json:"model"`
+	Count             int     `json:"count"`
+	Passed            int     `json:"passed"`
+	Failed            int     `json:"failed"`
+	SuccessRate       float64 `json:"success_rate"`
+	MeanLatencyMS     float64 `json:"mean_latency_ms"`
+	P95LatencyMS      int64   `json:"p95_latency_ms"`
+	InputTokens       int     `json:"input_tokens"`
+	OutputTokens      int     `json:"output_tokens"`
 }
 type Report struct {
+	DatasetSHA256 string        `json:"dataset_sha256,omitempty"`
+	ProviderMode  string        `json:"provider_mode,omitempty"`
 	SchemaVersion int           `json:"schema_version"`
 	RunID         string        `json:"run_id"`
 	Dataset       string        `json:"dataset"`
@@ -81,7 +89,7 @@ func LoadResults(reader io.Reader) ([]Record, error) {
 		if err = validateRecord(record); err != nil {
 			return nil, fmt.Errorf("line %d: %w", line, err)
 		}
-		if len(records) > 0 && (record.RunID != records[0].RunID || record.Dataset != records[0].Dataset) {
+		if len(records) > 0 && (record.RunID != records[0].RunID || record.Dataset != records[0].Dataset || record.DatasetSHA256 != records[0].DatasetSHA256 || record.ProviderMode != records[0].ProviderMode) {
 			return nil, fmt.Errorf("line %d: mixed run or dataset", line)
 		}
 		key := record.Model + "\x00" + record.CaseID
@@ -100,6 +108,24 @@ func LoadResults(reader io.Reader) ([]Record, error) {
 	return records, nil
 }
 func validateRecord(r Record) error {
+	if r.DatasetSHA256 != "" {
+		b, e := hex.DecodeString(r.DatasetSHA256)
+		if e != nil || len(b) != 32 || r.DatasetSHA256 != strings.ToLower(r.DatasetSHA256) {
+			return fmt.Errorf("invalid dataset digest")
+		}
+	}
+	if r.ProviderMode != "" && !validID(r.ProviderMode) {
+		return fmt.Errorf("invalid provider mode")
+	}
+	switch r.ErrorKind {
+	case "", "mismatch", "timeout", "provider_error", "invalid_response":
+	default:
+		return fmt.Errorf("invalid error kind")
+	}
+	if r.Success != nil && *r.Success && r.ErrorKind != "" {
+		return fmt.Errorf("successful record cannot have an error kind")
+	}
+
 	for _, v := range []string{r.RunID, r.Dataset, r.CaseID, r.Model} {
 		if strings.TrimSpace(v) == "" || len(v) > 256 || strings.ContainsAny(v, "\x00\r\n") {
 			return fmt.Errorf("identifiers must be nonblank, single-line strings of at most 256 bytes")
@@ -129,7 +155,7 @@ func Analyze(reader io.Reader) (Report, error) {
 		names = append(names, name)
 	}
 	sort.Strings(names)
-	report := Report{SchemaVersion: 1, RunID: records[0].RunID, Dataset: records[0].Dataset, Models: make([]ModelReport, 0, len(names))}
+	report := Report{DatasetSHA256: records[0].DatasetSHA256, ProviderMode: records[0].ProviderMode, SchemaVersion: 1, RunID: records[0].RunID, Dataset: records[0].Dataset, Models: make([]ModelReport, 0, len(names))}
 	for _, name := range names {
 		summary, e := Summarize(grouped[name])
 		if e != nil {
@@ -137,7 +163,13 @@ func Analyze(reader io.Reader) (Report, error) {
 		}
 		values := latencies[name]
 		sort.Slice(values, func(i, j int) bool { return values[i] < values[j] })
-		report.Models = append(report.Models, ModelReport{name, summary.Count, summary.Passed, summary.Count - summary.Passed, summary.SuccessRate, float64(summary.MeanLatency) / float64(time.Millisecond), values[(95*len(values)+99)/100-1], summary.InputTokens, summary.OutputTokens})
+		unknown := 0
+		for _, r := range records {
+			if r.Model == name && r.UsageKnown != nil && !*r.UsageKnown {
+				unknown++
+			}
+		}
+		report.Models = append(report.Models, ModelReport{unknown, name, summary.Count, summary.Passed, summary.Count - summary.Passed, summary.SuccessRate, float64(summary.MeanLatency) / float64(time.Millisecond), values[(95*len(values)+99)/100-1], summary.InputTokens, summary.OutputTokens})
 	}
 	return report, nil
 }

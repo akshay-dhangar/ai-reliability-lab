@@ -7,3 +7,11 @@ Implemented a dependency-free Go CLI reading a JSONL file or stdin and emitting 
 The checked-in synthetic example and expected report provide a reproducible CLI check. Tests also cover validation failures and ensure invalid input emits no partial report.
 
 Next: define task cases and expected outputs so a runner can produce these records reproducibly. Provider execution, actual grading, comparisons and HTML reporting remain unimplemented. No real model was evaluated.
+
+## 2 November 2026 — task definitions and runner
+
+Added bounded versioned dataset loading, exact/trim-space grading, canonical dataset hashes, and a provider interface that excludes expected answers. The sequential runner records mismatches, redacted provider failures, cooperative timeouts and unknown usage. Parent cancellation aborts output. A scripted replay adapter validates complete coverage and produces JSONL compatible with the metrics CLI.
+
+The three-case backend fixture has two passes and one intentional mismatch. Token counts are synthetic and latency measures replay execution. Tests cover grading, digest changes, malformed datasets, replay coverage, provider failure, deadline expiry, cancellation and the complete CLI-to-report pipeline. No live provider call was made.
+
+Next: compare matched runs and flag regressions without comparing different dataset digests or incompatible case coverage.

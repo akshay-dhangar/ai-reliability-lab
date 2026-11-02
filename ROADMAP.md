@@ -7,7 +7,7 @@ Status: active, started 2 November 2026. JSONL metrics, task definitions and a s
 - [x] Day 1: Load JSONL evaluation results and aggregate metrics.
 - [x] Day 2: Define reproducible task cases and expected outcomes.
 - [x] Day 3: Add provider-independent evaluation runner.
-- [ ] Day 4: Compare two runs and flag regressions.
+- [x] Day 4: Compare two runs and flag regressions.
 - [ ] Day 5: Export readable HTML and JSON reports.
 - [ ] Day 6: Test failures, timeouts and malformed cases.
 - [ ] Day 7: Document measured results and record an MVP demo.

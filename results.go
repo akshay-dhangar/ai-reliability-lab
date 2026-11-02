@@ -144,6 +144,9 @@ func Analyze(reader io.Reader) (Report, error) {
 	if err != nil {
 		return Report{}, err
 	}
+	return summarizeRecords(records)
+}
+func summarizeRecords(records []Record) (Report, error) {
 	grouped := map[string][]Sample{}
 	latencies := map[string][]int64{}
 	for _, r := range records {

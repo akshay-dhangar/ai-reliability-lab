@@ -1,6 +1,6 @@
 # AI Reliability Lab
 
-A Go toolkit for inspecting model evaluation results. **Implemented: JSONL metrics, task definitions, and a provider-independent runner with a scripted replay adapter. The full evaluation MVP is still in progress.**
+A Go toolkit for inspecting model evaluation results. **Implemented: JSONL metrics, task definitions, a provider-independent runner with a scripted replay adapter, and paired-run comparisons. The full evaluation MVP is still in progress.**
 
 ## Run
 
@@ -45,7 +45,7 @@ go test -race ./...
 
 Tests cover the documented example, malformed/missing measurements, mixed runs, duplicate cases, bounded input, numeric overflow, deterministic ordering and CLI failure output.
 
-Next: matched-run regression comparisons and HTML reporting. See [ROADMAP.md](ROADMAP.md) and [PROGRESS.md](PROGRESS.md). No live provider calls, deployments, or model-quality claims have been made.
+Next: readable HTML reports and final MVP documentation. See [ROADMAP.md](ROADMAP.md) and [PROGRESS.md](PROGRESS.md). No live provider calls, deployments, or model-quality claims have been made.
 
 ## Run an evaluation (scripted replay)
 
@@ -64,4 +64,29 @@ The Go `Provider` interface receives only a task ID and prompt, never the expect
 
 `usage_known: false` means token counts are unknown and stored as zero placeholders. Reports count these records in `unknown_usage_count`; token totals then represent known usage only. Legacy input without the flag retains its supplied counts. Replay token counts are explicitly supplied fixture data. Raw responses and prompts are not copied into results, and upstream error text is not emitted.
 
-The replay adapter validates complete task coverage before execution. A future real provider adapter can implement the same interface. Live providers, matched-run comparisons, and HTML reports remain unimplemented.
+The replay adapter validates complete task coverage before execution. A future real provider adapter can implement the same interface. Live providers and HTML reports remain unimplemented.
+
+## Compare matched runs
+
+```sh
+go run ./cmd/evaluate -dataset examples/tasks.json -replay examples/replay.json -run-id baseline > baseline.jsonl
+go run ./cmd/evaluate -dataset examples/tasks.json -replay examples/replay-candidate.json -run-id candidate > candidate.jsonl
+go run ./cmd/compare -baseline baseline.jsonl -candidate candidate.jsonl
+```
+
+Both fixtures pass 2/3 tasks, but the candidate regresses on `http-created` and improves on `queue-order`. Comparing only aggregate success rates would hide this regression. Changes are paired by model and case ID, and output order is deterministic.
+
+Comparison requires distinct run IDs, matching dataset IDs and nonempty dataset digests, matching nonempty provider modes, and identical model/case coverage. It rejects mismatched data instead of silently intersecting cases. Model labels must match: use a stable experiment label for successive configurations, and keep configuration details with your run artifacts. This is not a cross-model ranking command. The supplied digest is provenance metadata, not proof that an external producer evaluated the dataset honestly.
+
+Reports include baseline/candidate summaries, candidate-minus-baseline success and latency deltas, per-case regressions/improvements and failure-kind changes. Token deltas are available only when every paired record explicitly has `usage_known: true`; otherwise they are JSON null with `token_comparison_available: false`. This does not make fixture token values into live measurements.
+
+`has_regressions` means at least one case changed from pass to fail, even if other cases improved. Timing and token deltas are descriptive; they do not trigger this gate and are not evidence of statistical significance. Replay timing is local execution time, not model latency.
+
+For CI, build the command and request an outcome gate:
+
+```sh
+go build -o /tmp/reliability-compare ./cmd/compare
+/tmp/reliability-compare -baseline baseline.jsonl -candidate candidate.jsonl -fail-on-regression
+```
+
+Exit codes: 0 for a valid report (or no regressions with the gate), 1 for invalid input or an operational error, 2 for detected regressions when gated. A valid regression report is written before exit 2; invalid comparisons emit no report. `go run` wraps executable exit codes, so use the built binary when CI needs to distinguish 1 from 2.

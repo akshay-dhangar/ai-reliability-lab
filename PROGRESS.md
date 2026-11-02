@@ -15,3 +15,11 @@ Added bounded versioned dataset loading, exact/trim-space grading, canonical dat
 The three-case backend fixture has two passes and one intentional mismatch. Token counts are synthetic and latency measures replay execution. Tests cover grading, digest changes, malformed datasets, replay coverage, provider failure, deadline expiry, cancellation and the complete CLI-to-report pipeline. No live provider call was made.
 
 Next: compare matched runs and flag regressions without comparing different dataset digests or incompatible case coverage.
+
+## 2 November 2026 — paired comparisons
+
+Added a comparison API and CLI requiring distinct runs, matching nonempty dataset digests/provider modes and identical model/case coverage. Reports preserve baseline/candidate summaries, metric deltas and sorted case-level changes. Token deltas are omitted without explicit known usage on every pair. An optional exit-2 gate detects any pass-to-fail transition, regardless of the net success-rate change.
+
+The candidate replay fixture demonstrates one regression and one improvement with an unchanged 2/3 success rate. Tests cover this masking scenario, reordered input, incompatible coverage/provenance, unknown usage and CLI output/exit behavior. Latency/token deltas remain descriptive; no statistical significance or live-model performance is claimed.
+
+Next: HTML report export, final failure-case review and a reproducible demo with a factual LinkedIn draft.

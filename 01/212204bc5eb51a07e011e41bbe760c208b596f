@@ -1,0 +1,43 @@
+README.md
+  s_eb0b26e52cc031::t_bf6ce46d3d0a03 3,48,67-92
+compare.go
+  s_90026bd1685103::t_f3037a459a7309 1-116
+cmd/compare/main.go
+  s_90026bd1685103::t_f3037a459a7309 1-59
+examples/replay-candidate.json
+  s_90026bd1685103::t_f3037a459a7309 1-7
+ROADMAP.md
+  s_eb0b26e52cc031::t_bf6ce46d3d0a03 10
+PROGRESS.md
+  s_eb0b26e52cc031::t_bf6ce46d3d0a03 18-25
+results.go
+  s_90026bd1685103::t_f3037a459a7309 147-149
+cmd/compare/main_test.go
+  s_eb0b26e52cc031::t_893eb5832f12be 1-73
+compare_test.go
+  s_eb0b26e52cc031::t_c1b98e161e2c2a 1-61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "01212204bc5eb51a07e011e41bbe760c208b596f",
+  "prompts": {},
+  "sessions": {
+    "s_90026bd1685103": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01a187ba-22aa-7793-8324-39d8f75719e0",
+        "model": "unknown"
+      },
+      "human_author": "Akshay Dhangar <48667712+akshay-dhangar@users.noreply.github.com>"
+    },
+    "s_eb0b26e52cc031": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a187ba-22aa-7793-8324-39d8f75719e0",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Akshay Dhangar <48667712+akshay-dhangar@users.noreply.github.com>"
+    }
+  }
+}

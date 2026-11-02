@@ -1,0 +1,46 @@
+PROGRESS.md
+  s_90026bd1685103::t_7fb7c9816d1005 10-17
+examples/replay.json
+  s_eb0b26e52cc031::t_c9f04890a10c3b 1-7
+ROADMAP.md
+  s_90026bd1685103::t_7fb7c9816d1005 5,8-9
+results.go
+  s_eb0b26e52cc031::t_c9f04890a10c3b 21-32,35-44,47-48,92
+  s_eb0b26e52cc031::t_a9298d3d4b225f 6,111-128,158,166-172
+cmd/evaluate/main.go
+  s_eb0b26e52cc031::t_c9f04890a10c3b 1-74
+README.md
+  s_90026bd1685103::t_7fb7c9816d1005 3,48-67
+evaluation.go
+  s_eb0b26e52cc031::t_c9f04890a10c3b 1-183
+examples/tasks.json
+  s_eb0b26e52cc031::t_c9f04890a10c3b 1-9
+cmd/evaluate/main_test.go
+  s_eb0b26e52cc031::t_8b485c8ae314ea 1-30
+evaluation_test.go
+  s_eb0b26e52cc031::t_7b0d924957a9eb 1-88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "0bfafe688722689c4e599ada3b26b96943db1e76",
+  "prompts": {},
+  "sessions": {
+    "s_90026bd1685103": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01a187ba-22aa-7793-8324-39d8f75719e0",
+        "model": "unknown"
+      },
+      "human_author": "Akshay Dhangar <48667712+akshay-dhangar@users.noreply.github.com>"
+    },
+    "s_eb0b26e52cc031": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a187ba-22aa-7793-8324-39d8f75719e0",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Akshay Dhangar <48667712+akshay-dhangar@users.noreply.github.com>"
+    }
+  }
+}

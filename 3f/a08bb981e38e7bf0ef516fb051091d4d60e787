@@ -1,0 +1,53 @@
+html.go
+  s_90026bd1685103::t_4a9c177a820920 1-32
+docs/DEMO.md
+  s_eb0b26e52cc031::t_f82be0b1909f7d 1-40
+cmd/compare/main.go
+  s_90026bd1685103::t_4a9c177a820920 27,37-39,54-61
+cmd/reliability/main.go
+  s_90026bd1685103::t_4a9c177a820920 21,29-31,45-47
+ROADMAP.md
+  s_eb0b26e52cc031::t_f82be0b1909f7d 5,11-13,25-26
+.github/workflows/ci.yml
+  s_eb0b26e52cc031::t_f82be0b1909f7d 16
+PROGRESS.md
+  s_eb0b26e52cc031::t_f82be0b1909f7d 26-33
+docs/social/linkedin-draft.md
+  s_eb0b26e52cc031::t_f82be0b1909f7d 1-15
+results.go
+  s_90026bd1685103::t_4a9c177a820920 153-157
+README.md
+  s_eb0b26e52cc031::t_f82be0b1909f7d 3,48,67,93-96
+cmd/compare/main_test.go
+  s_eb0b26e52cc031::t_bc51e95ae36638 11,71-74
+cmd/reliability/main_test.go
+  s_eb0b26e52cc031::t_67fa7b61448b67 29-42
+html_test.go
+  s_eb0b26e52cc031::t_d631ae3ed3247a 1-53
+scripts/demo.sh
+  s_eb0b26e52cc031::t_0c4946968316d6 1-22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "3fa08bb981e38e7bf0ef516fb051091d4d60e787",
+  "prompts": {},
+  "sessions": {
+    "s_90026bd1685103": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01a187ba-22aa-7793-8324-39d8f75719e0",
+        "model": "unknown"
+      },
+      "human_author": "Akshay Dhangar <48667712+akshay-dhangar@users.noreply.github.com>"
+    },
+    "s_eb0b26e52cc031": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a187ba-22aa-7793-8324-39d8f75719e0",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Akshay Dhangar <48667712+akshay-dhangar@users.noreply.github.com>"
+    }
+  }
+}

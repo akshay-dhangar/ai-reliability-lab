@@ -150,7 +150,11 @@ func summarizeRecords(records []Record) (Report, error) {
 	grouped := map[string][]Sample{}
 	latencies := map[string][]int64{}
 	for _, r := range records {
-		grouped[r.Model] = append(grouped[r.Model], Sample{*r.Success, time.Duration(*r.LatencyMS) * time.Millisecond, *r.InputTokens, *r.OutputTokens})
+		input, output := *r.InputTokens, *r.OutputTokens
+		if r.UsageKnown != nil && !*r.UsageKnown {
+			input, output = 0, 0
+		}
+		grouped[r.Model] = append(grouped[r.Model], Sample{*r.Success, time.Duration(*r.LatencyMS) * time.Millisecond, input, output})
 		latencies[r.Model] = append(latencies[r.Model], *r.LatencyMS)
 	}
 	names := make([]string, 0, len(grouped))

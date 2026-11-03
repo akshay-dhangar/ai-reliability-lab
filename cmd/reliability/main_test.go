@@ -26,3 +26,17 @@ func TestCLIInvalidDoesNotEmitPartialReport(t *testing.T) {
 		t.Fatalf("err=%v output=%s", err, output.String())
 	}
 }
+
+func TestHTMLFormat(t *testing.T) {
+	var out, diagnostics bytes.Buffer
+	if err := run([]string{"-input", "../../examples/scripted-results.jsonl", "-format", "html"}, nil, &out, &diagnostics); err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(out.String(), "<!doctype html>") {
+		t.Fatal("not HTML")
+	}
+	out.Reset()
+	if err := run([]string{"-format", "xml"}, nil, &out, &diagnostics); err == nil || out.Len() != 0 {
+		t.Fatal("invalid format accepted")
+	}
+}

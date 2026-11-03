@@ -2,15 +2,15 @@
 
 Goal: Evaluate model task success, latency and token usage with reproducible datasets.
 
-Status: active, started 2 November 2026. JSONL metrics, task definitions and a scripted evaluation runner are implemented; the full MVP is not. Target window: 2–8 November 2026.
+Status: scoped local MVP completed 3 November 2026. Started 2 November; original target window 2–8 November. Live provider evaluation remains outside the completed scope.
 
 - [x] Day 1: Load JSONL evaluation results and aggregate metrics.
 - [x] Day 2: Define reproducible task cases and expected outcomes.
 - [x] Day 3: Add provider-independent evaluation runner.
 - [x] Day 4: Compare two runs and flag regressions.
-- [ ] Day 5: Export readable HTML and JSON reports.
-- [ ] Day 6: Test failures, timeouts and malformed cases.
-- [ ] Day 7: Document measured results and record an MVP demo.
+- [x] Day 5: Export readable HTML and JSON reports.
+- [x] Day 6: Test failures, timeouts and malformed cases.
+- [x] Day 7: Document measured results and record an MVP demo.
 
 ## Definition of done
 
@@ -22,3 +22,5 @@ Status: active, started 2 November 2026. JSONL metrics, task definitions and a s
 - Real model quality is not claimed without a live evaluation.
 
 Seven days is a target. Reduce scope or record unfinished work explicitly; never mark a project complete merely because its week ended.
+
+Completion evidence: JSON and standalone HTML reports, a one-command scripted demo, CI regression gate, failure-path tests and a local LinkedIn draft. See docs/DEMO.md for exact scope and reproduction.

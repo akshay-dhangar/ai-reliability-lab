@@ -24,6 +24,7 @@ func main() {
 func run(args []string, out, diagnostics io.Writer) error {
 	f := flag.NewFlagSet("compare", flag.ContinueOnError)
 	f.SetOutput(diagnostics)
+	format := f.String("format", "json", "output format: json or html")
 	baseline := f.String("baseline", "", "baseline JSONL file")
 	candidate := f.String("candidate", "", "candidate JSONL file")
 	gate := f.Bool("fail-on-regression", false, "exit 2 after writing report if any case changes from pass to fail")
@@ -32,6 +33,9 @@ func run(args []string, out, diagnostics io.Writer) error {
 	}
 	if f.NArg() != 0 || *baseline == "" || *candidate == "" {
 		return fmt.Errorf("-baseline and -candidate are required; no positional arguments")
+	}
+	if *format != "json" && *format != "html" {
+		return fmt.Errorf("format must be json or html")
 	}
 	b, err := os.Open(*baseline)
 	if err != nil {
@@ -47,9 +51,14 @@ func run(args []string, out, diagnostics io.Writer) error {
 	if err != nil {
 		return err
 	}
-	encoder := json.NewEncoder(out)
-	encoder.SetIndent("", "  ")
-	if err = encoder.Encode(report); err != nil {
+	if *format == "html" {
+		err = core.WriteComparisonHTML(out, report)
+	} else {
+		encoder := json.NewEncoder(out)
+		encoder.SetIndent("", "  ")
+		err = encoder.Encode(report)
+	}
+	if err != nil {
 		return err
 	}
 	if *gate && report.HasRegressions {

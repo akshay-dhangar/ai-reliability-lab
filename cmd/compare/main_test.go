@@ -8,6 +8,7 @@ import (
 	core "github.com/akshay-dhangar/ai-reliability-lab"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 )
@@ -65,6 +66,10 @@ func TestCompareCLIAndGate(t *testing.T) {
 	out.Reset()
 	if err = run(append(args, "-fail-on-regression"), &out, &diag); !errors.Is(err, errRegression) || out.Len() == 0 {
 		t.Fatalf("gate: %v %s", err, out.String())
+	}
+	out.Reset()
+	if err = run(append(args, "-format", "html", "-fail-on-regression"), &out, &diag); !errors.Is(err, errRegression) || !strings.Contains(out.String(), "Outcome regressions detected") {
+		t.Fatal("HTML gate failed")
 	}
 	out.Reset()
 	if err = run([]string{"-baseline", paths[0], "-candidate", paths[0]}, &out, &diag); err == nil || out.Len() != 0 {

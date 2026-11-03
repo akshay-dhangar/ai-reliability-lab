@@ -1,6 +1,6 @@
 # AI Reliability Lab
 
-A Go toolkit for inspecting model evaluation results. **Implemented: JSONL metrics, task definitions, a provider-independent runner with a scripted replay adapter, and paired-run comparisons. The full evaluation MVP is still in progress.**
+A Go toolkit for inspecting model evaluation results. **Implemented: JSONL metrics, task definitions, a provider-independent runner with a scripted replay adapter, and paired-run comparisons. The scoped local MVP is complete, including standalone HTML reports; live provider evaluation is not implemented.**
 
 ## Run
 
@@ -45,7 +45,7 @@ go test -race ./...
 
 Tests cover the documented example, malformed/missing measurements, mixed runs, duplicate cases, bounded input, numeric overflow, deterministic ordering and CLI failure output.
 
-Next: readable HTML reports and final MVP documentation. See [ROADMAP.md](ROADMAP.md) and [PROGRESS.md](PROGRESS.md). No live provider calls, deployments, or model-quality claims have been made.
+Run the complete walkthrough with `./scripts/demo.sh`; see [demo instructions and scope](docs/DEMO.md). See [ROADMAP.md](ROADMAP.md) and [PROGRESS.md](PROGRESS.md). No live provider calls, deployments, or model-quality claims have been made.
 
 ## Run an evaluation (scripted replay)
 
@@ -64,7 +64,7 @@ The Go `Provider` interface receives only a task ID and prompt, never the expect
 
 `usage_known: false` means token counts are unknown and stored as zero placeholders. Reports count these records in `unknown_usage_count`; token totals then represent known usage only. Legacy input without the flag retains its supplied counts. Replay token counts are explicitly supplied fixture data. Raw responses and prompts are not copied into results, and upstream error text is not emitted.
 
-The replay adapter validates complete task coverage before execution. A future real provider adapter can implement the same interface. Live providers and HTML reports remain unimplemented.
+The replay adapter validates complete task coverage before execution. A future real provider adapter can implement the same interface. Live providers remain unimplemented. JSON and standalone HTML reports are available using `-format json|html`.
 
 ## Compare matched runs
 
@@ -90,3 +90,7 @@ go build -o /tmp/reliability-compare ./cmd/compare
 ```
 
 Exit codes: 0 for a valid report (or no regressions with the gate), 1 for invalid input or an operational error, 2 for detected regressions when gated. A valid regression report is written before exit 2; invalid comparisons emit no report. `go run` wraps executable exit codes, so use the built binary when CI needs to distinguish 1 from 2.
+
+## One-command demo
+
+Run `./scripts/demo.sh` and open the printed directory’s `comparison.html`. It reproduces an unchanged aggregate score with a hidden case-level regression, verifies the CI gate, and saves JSON/HTML evidence. See [DEMO.md](docs/DEMO.md).

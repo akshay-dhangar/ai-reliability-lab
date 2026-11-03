@@ -18,12 +18,16 @@ func main() {
 func run(args []string, stdin io.Reader, stdout, stderr io.Writer) error {
 	flags := flag.NewFlagSet("reliability", flag.ContinueOnError)
 	flags.SetOutput(stderr)
+	format := flags.String("format", "json", "output format: json or html")
 	input := flags.String("input", "-", "JSONL results file, or - for stdin")
 	if err := flags.Parse(args); err != nil {
 		return err
 	}
 	if flags.NArg() != 0 {
 		return fmt.Errorf("unexpected positional arguments")
+	}
+	if *format != "json" && *format != "html" {
+		return fmt.Errorf("format must be json or html")
 	}
 	reader := stdin
 	if *input != "-" {
@@ -37,6 +41,9 @@ func run(args []string, stdin io.Reader, stdout, stderr io.Writer) error {
 	report, err := core.Analyze(reader)
 	if err != nil {
 		return err
+	}
+	if *format == "html" {
+		return core.WriteReportHTML(stdout, report)
 	}
 	encoder := json.NewEncoder(stdout)
 	encoder.SetIndent("", "  ")

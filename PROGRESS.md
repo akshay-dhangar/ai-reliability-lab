@@ -23,3 +23,11 @@ Added a comparison API and CLI requiring distinct runs, matching nonempty datase
 The candidate replay fixture demonstrates one regression and one improvement with an unchanged 2/3 success rate. Tests cover this masking scenario, reordered input, incompatible coverage/provenance, unknown usage and CLI output/exit behavior. Latency/token deltas remain descriptive; no statistical significance or live-model performance is claimed.
 
 Next: HTML report export, final failure-case review and a reproducible demo with a factual LinkedIn draft.
+
+## 3 November 2026 — local MVP completion
+
+Added standalone, script-free HTML summaries and comparisons using Go html/template with escaped labels and responsive tables. Both CLIs accept -format json|html; the regression gate preserves its exit-2 contract for HTML. Fixed unknown-usage records contributing external placeholder values to token totals.
+
+The repeatable demo creates a new output directory, exports JSON/HTML and verifies the built gate. Tests cover HTML escaping, writer errors, format rejection, HTML gate behavior and unknown token totals. A factual LinkedIn draft is saved but not posted.
+
+Completed scope: local evaluation and comparison toolkit with scripted replay. Live providers, semantic grading, statistical significance and production hosting remain unimplemented. See docs/DEMO.md.
